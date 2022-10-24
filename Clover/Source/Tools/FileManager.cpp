@@ -66,14 +66,14 @@
 		handle->file_ << data;
 	}
 
-	void FileManager::Write(FileHandle* handle, const int* data, uint32_t count /*= 1*/, const char* sepatation /*= ""*/)
+	void FileManager::Write(FileHandle* handle, const int* data, uint32_t count /*= 1*/, const char* separation /*= ""*/)
 	{
-		Write<int>(handle, data, count, sepatation);
+		Write<int>(handle, data, count, separation);
 	}
 
-	void FileManager::Write(FileHandle* handle, const float* data, uint32_t count /*= 1*/, const char* sepatation /*= ""*/)
+	void FileManager::Write(FileHandle* handle, const float* data, uint32_t count /*= 1*/, const char* separation /*= ""*/)
 	{
-		Write<float>(handle, data, count, sepatation);
+		Write<float>(handle, data, count, separation);
 	}
 
 	int32_t FileManager::Find(FileHandle* handle, const char* data, int32_t size)

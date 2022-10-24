@@ -4,9 +4,66 @@
 #define SANDBOX 1
 
 #include <CloverEngine.h>
-#include "Sandbox/rectangle.h"
 #include "imgui.h"
 #include "Graphics/UI.h"
+#include "Tools/Serializer.h"
+
+struct Foo
+{
+	int pepe = 0;
+	int pepe1 = 0;
+	float pepe2 = 0;
+	float pepe3 = 0;
+
+	SERIALIZED_CLASS(
+		Foo,
+		SERIALIZE_VAR(pepe)
+		SERIALIZE_VAR(pepe1)
+		SERIALIZE_VAR(pepe2)
+		SERIALIZE_VAR(pepe3),
+
+		DESERIALIZE_VAR(pepe)
+		DESERIALIZE_VAR(pepe1)
+		DESERIALIZE_VAR(pepe2)
+		DESERIALIZE_VAR(pepe3),
+
+		SERIALIZED_VAR(pepe),
+		SERIALIZED_VAR(pepe1),
+		SERIALIZED_VAR(pepe2),
+		SERIALIZED_VAR(pepe3),
+		);
+
+};
+
+struct Foo2
+{
+	int manolo = 0;
+	int manolo1 = 0;
+	float manolo2 = 0;
+	float manolo3 = 0;
+	Foo foo;
+
+	SERIALIZED_CLASS(
+		Foo2,
+
+		SERIALIZE_CHILD(foo)
+		SERIALIZE_VAR(manolo)
+		SERIALIZE_VAR(manolo1)
+		SERIALIZE_VAR(manolo2)
+		SERIALIZE_VAR(manolo3),
+
+		DESERIALIZE_CHILD(foo)
+		DESERIALIZE_VAR(manolo)
+		DESERIALIZE_VAR(manolo1)
+		DESERIALIZE_VAR(manolo2)
+		DESERIALIZE_VAR(manolo3),
+
+		SERIALIZED_VAR(manolo),
+		SERIALIZED_VAR(manolo1),
+		SERIALIZED_VAR(manolo2),
+		SERIALIZED_VAR(manolo3),
+		);
+};
 
 class SandboxEngine : public CloverEngine
 {
@@ -74,6 +131,24 @@ protected:
 		TestButton.m_OnHover.AddFunction(this, &SandboxEngine::OnButtonHover);
 		TestButton.m_OnHoverOut.AddFunction(this, &SandboxEngine::OnButtonHoverOut);
 		TestButton.m_OnPressed.AddFunction(this, &SandboxEngine::OnButtonPressed);
+
+		
+		Foo2 foo;
+		foo.m_Serialized = JsonSerializer::Load("assets/foo.json");
+		foo.Deserialize();
+
+		foo.manolo += 1;
+		foo.manolo1 -= 1;
+		foo.manolo2 *= 1.25f;
+		foo.manolo3 *= 0.75f;
+
+		foo.foo.pepe += 1;
+		foo.foo.pepe1 -= 1;
+		foo.foo.pepe2 *= 1.25f;
+		foo.foo.pepe3 *= 0.75f;
+
+		foo.Serialize();
+		JsonSerializer::Write("assets/foo.json", foo.m_Serialized);
 
 	}
 

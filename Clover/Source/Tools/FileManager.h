@@ -44,8 +44,8 @@
 		static void WriteLine(FileHandle* handle, const char* data);
 
 
-		static void Write(FileHandle* handle, const int* data, uint32_t count = 1, const char* sepatation = "");
-		static void Write(FileHandle* handle, const float* data, uint32_t count = 1, const char* sepatation = "");
+		static void Write(FileHandle* handle, const int* data, uint32_t count = 1, const char* separation = "");
+		static void Write(FileHandle* handle, const float* data, uint32_t count = 1, const char* separation = "");
 
 		template<class T>
 		static void WriteBin(FileHandle* handle, const T* data, uint32_t count = 1);
@@ -65,7 +65,7 @@
 
 	private:
 		template<class T>
-		static void Write(FileHandle* handle, const T* data, uint32_t count = 1, const char* sepatation = "");
+		static void Write(FileHandle* handle, const T* data, uint32_t count = 1, const char* separation = "");
 	};
 
 
@@ -95,11 +95,11 @@
 	}
 
 	template<class T>
-	void FileManager::Write(FileHandle* handle, const T* data, uint32_t count /*= 1*/, const char* sepatation /*= ""*/)
+	void FileManager::Write(FileHandle* handle, const T* data, uint32_t count /*= 1*/, const char* separation /*= ""*/)
 	{
 		CHECK(handle, );
 		for (int i = 0; i < count; ++i)
 		{
-			handle->file_ << *(data + i) << sepatation;
+			handle->file_ << *(data + i) << separation;
 		}
 	}

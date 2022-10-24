@@ -309,7 +309,7 @@
 		}		
 	}
 
-	Ref<Texture2D> Renderer2D::GetWhiteTexture()
+	Ref<Texture2D>& Renderer2D::GetWhiteTexture()
 	{
 		return s_DefaultData.WhiteTexture;
 	}

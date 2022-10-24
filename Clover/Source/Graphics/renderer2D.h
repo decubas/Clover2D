@@ -50,7 +50,7 @@ public:
 
 		static void Shutdown();
 
-		static Ref<Texture2D> GetWhiteTexture();
+		static Ref<Texture2D>& GetWhiteTexture();
 		static Ref<Texture2D> GetLastTexture();
 		static u32 CreateLayer();
 		static void UseLayer(u32 LayerToUse);
