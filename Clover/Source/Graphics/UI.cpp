@@ -1,4 +1,5 @@
 #include "UI.h"
+#include "CloverEngine.h"
 #include "Graphics/renderer2D.h"
 #include "Graphics/camera.h"
 #include "Graphics/window.h"
@@ -11,7 +12,7 @@ void UI::Init(Ref<Window> window, SceneCamera* camera)
 {
 	s_Window = window;
 	s_Camera = camera;
-	TextRenderer::SetFont(new Font("assets/fonts/charmap-oldschool_white.png", { 18, 6 }, { 7, 9 }));
+	TextRenderer::SetFont(new Font(ASSETS_PATH("fonts/charmap-oldschool_white.png"), { 18, 6 }, { 7, 9 }));
 }
 
 void UI::RegisterUIObject(UIButton& button)

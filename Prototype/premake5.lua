@@ -1,5 +1,5 @@
-project "Clover"
-	kind "StaticLib"
+project "Prototype"
+	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "on"
@@ -9,18 +9,8 @@ project "Clover"
 
 	files
 	{
-		"Source/**.h",
-		"Source/**.hpp",
-		"Source/**.cpp",
-		"Source/**.cc",
-		"Deps/stb_image/**.h",
-		"Deps/stb_image/**.cpp",
-
-		
-		"Deps/imgui/examples/imgui_impl_glfw.cpp",
-		"Deps/imgui/examples/imgui_impl_glfw.h",
-		"Deps/imgui/examples/imgui_impl_opengl3.cpp",
-		"Deps/imgui/examples/imgui_impl_opengl3.h"
+		"src/**.h",
+		"src/**.cpp"
 	}
 
 	defines
@@ -32,24 +22,15 @@ project "Clover"
 	includedirs
 	{
 		"%{wks.location}/Clover/Source",
-		"%{wks.location}/Clover/Deps/GLFW/include",
-		"%{wks.location}/Clover/Deps/Glad/include",
 		"%{wks.location}/Clover/Deps/imgui",
 		"%{wks.location}/Clover/Deps/glm",
 		"%{wks.location}/Clover/Deps/stb_image",
-		"%{wks.location}/Clover/Deps/box2d/include",
-		"%{wks.location}/Clover/Deps/yaml-cpp/include",
-		"%{wks.location}/Clover/Deps/ImGuizmo",
+		"%{wks.location}/Clover/Deps/yaml-cpp/include"
 	}
 
 	links
 	{
-		"GLFW",
-		"Box2D",
-		"Glad",
-		"ImGui",
-		"yaml-cpp",
-		"opengl32.lib"
+		"Clover"
 	}
 
 	filter "system:windows"

@@ -306,7 +306,12 @@
 				delete[] s_Layers[i].s_Data.QuadVertexBufferBase;
 				s_Layers[i].s_Data.QuadVertexBufferBase = nullptr;
 			}
-		}		
+			s_Layers[i].s_Data.QuadVertexArray.reset();
+		}	
+
+		s_DefaultData.ScreenFrameBuf.reset();
+		s_DefaultData.TextureShader.reset();
+		s_DefaultData.WhiteTexture.reset();
 	}
 
 	Ref<Texture2D>& Renderer2D::GetWhiteTexture()

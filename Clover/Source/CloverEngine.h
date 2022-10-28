@@ -2,6 +2,7 @@
 #define _CLOVER_ENGINE_H__ 1
 
 #define USE_2D_RENDERER 1
+#define ASSETS_PATH(path) std::string("../assets/" + std::string(path))
 
 #include <Clover.h>
 #include <Window.h>

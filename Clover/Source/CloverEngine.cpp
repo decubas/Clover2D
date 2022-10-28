@@ -120,8 +120,8 @@ void CloverEngine::ImGuiConstruct()
 	ImGui::StyleColorsDark();
 	ImGuiSetDarkTheme();
 
-	io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", 18.0f);
-	io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", 18.0f);
+	io.Fonts->AddFontFromFileTTF(ASSETS_PATH("fonts/opensans/OpenSans-Bold.ttf").c_str(), 18.0f);
+	io.FontDefault = io.Fonts->AddFontFromFileTTF(ASSETS_PATH("fonts/opensans/OpenSans-Regular.ttf").c_str(), 18.0f);
 
 	ImGuiStyle& style = ImGui::GetStyle();
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

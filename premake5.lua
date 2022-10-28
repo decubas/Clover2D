@@ -2,7 +2,7 @@ include "./vendor/premake/premake_customization/solution_items.lua"
 
 workspace "Clover"
 	architecture "x86_64"
-	startproject "Clover"
+	startproject "Prototype"
 
 	configurations
 	{
@@ -33,4 +33,7 @@ group "Dependencies"
 	include "Clover/Deps/yaml-cpp"
 group ""
 
-include "Clover"
+group "Engine"
+	include "Clover"
+group ""
+	include "Prototype"
