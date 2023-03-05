@@ -21,6 +21,7 @@ project "Prototype"
 
 	includedirs
 	{
+		"%{wks.location}/Prototype/src",
 		"%{wks.location}/Clover/Source",
 		"%{wks.location}/Clover/Deps/imgui",
 		"%{wks.location}/Clover/Deps/glm",

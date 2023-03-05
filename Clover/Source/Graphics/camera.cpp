@@ -56,9 +56,11 @@ void TransformComponent::ResetTransform()
 		}
 	}
 
-	CVec4 EditorCamera::ScreenToWorld(const CVec2& Position)
+	CVec4 EditorCamera::ScreenToWorld(const CVec2& Position, const CVec3& cameraPosition)
 	{
-		return CVec4{ Position.x, Position.y, 0.f, 1.f } * glm::inverse(m_Transform.getTransformMatrix() * m_Projection);
+		Window* window = Window::GetCurrentWindow();
+		CVec2 pos = window->MapToViewport(Position) * CVec2(1, -1);
+		return CVec4{ pos.x, pos.y, 0.f, 1.f } * glm::inverse(m_Transform.getTransformMatrix() * m_Projection);
 	}
 
 	SceneCamera::SceneCamera()
@@ -93,10 +95,10 @@ void TransformComponent::ResetTransform()
 
 	void SceneCamera::RecalculateProjection()
 	{
-		//float right = 0.5f * m_AspecRatio * m_OrthoSize;
-		//float top = 0.5f * m_OrthoSize;
-		float right = m_OrthoSize;
-		float top = m_OrthoSize;
+		float right = 0.5f * m_AspecRatio * m_OrthoSize;
+		float top = 0.5f * m_OrthoSize;
+		//float right = m_OrthoSize;
+		//float top = m_OrthoSize;
 
 		if (m_ProjectionType == ProjectionType::Orthographic)
 			m_Projection = glm::ortho(-right, right, top, -top, m_OrthoNear, m_OrthoFar);
@@ -104,7 +106,10 @@ void TransformComponent::ResetTransform()
 			m_Projection = glm::perspective(m_PerspFOV, m_AspecRatio, m_PerspNear, m_PerspFar);
 	}
 
-	CVec4 Camera::ScreenToWorld(const CVec2& Position)
+
+	CVec4 Camera::ScreenToWorld(const CVec2& Position, const CVec3& cameraPosition)
 	{
-		return CVec4{ Position.x, Position.y, 0.f, 1.f } * glm::inverse(m_Projection);
+		Window* window = Window::GetCurrentWindow();
+		CVec2 pos = window->MapToViewport(Position) * CVec2(1, -1);
+		return CVec4{ pos.x, pos.y, 0.f, 1.f } * glm::inverse(m_Projection) - CVec4(cameraPosition, 0.f);
 	}

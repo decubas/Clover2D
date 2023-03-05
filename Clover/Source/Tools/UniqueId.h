@@ -9,7 +9,7 @@
 		UniqueID();
 		UniqueID(uint64_t uuid);
 		UniqueID(const UniqueID& other);
-
+		bool isValid() { return m_UUID > 0; }
 		operator uint64_t () { return m_UUID; }
 		operator const uint64_t() const { return m_UUID; }
 	private:

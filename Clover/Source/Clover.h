@@ -20,10 +20,13 @@
 #include <unordered_set>
 #include <typeindex>
 #include <iostream>
+#include <stdlib.h>
 #include <cstdlib>
 #include <stdint.h>
 #include <filesystem>
 #include <unordered_map>
+
+
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -38,6 +41,8 @@
 //#include "Tools/Log.h"
 //#include "Tools/FileManager.h"
 //#include "Tools/FileSystem.h"
+#include "Tools/UniqueId.h"
+#include "Tools/Random.h"
 
 
 #define MIN(a,b) (a < b ? a : b)
@@ -476,6 +481,11 @@ class Cl_Object
 public:
 	Cl_Object() = default;
 	~Cl_Object() = default;
+
+	virtual void ShowEditor() {};
+	UniqueID GetInternalID() { return internal_id; }
+private:
+	UniqueID internal_id;
 };
 
 

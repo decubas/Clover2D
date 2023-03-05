@@ -378,17 +378,18 @@
 		return s_Layers.size() - 1;
 	}
 
-	void Renderer2D::BeginScene(const SceneCamera& camera, const CMat4& transform)
+	void Renderer2D::BeginScene(const Camera& camera, const CMat4& transform)
 	{
-		s_Layers[s_CurrentLayer].s_Data.ViewProjection = camera.GetProjection() *glm::inverse(transform);
+		s_Layers[s_CurrentLayer].s_Data.ViewProjection = camera.GetProjection() * transform;
 		s_DefaultData.ScreenFrameBuf->bind();
+
+		StartLineBatch();
 	}
 
 	void Renderer2D::BeginScene(EditorCamera& camera)
 	{
 		s_Layers[s_CurrentLayer].s_Data.ViewProjection = camera.GetProjection() * camera.GetTransform().RecalculateModel();
 		s_DefaultData.ScreenFrameBuf->bind();
-
 
 		StartLineBatch();
 	}
@@ -767,7 +768,7 @@
 		s_Stats.QuadCount++;
 	}
 
-	void Renderer2D::DrawQuad(const Renderable& RenderInfo)
+	void Renderer2D::DrawQuad(const RenderableInfo& RenderInfo)
 	{
 		DrawRotatedQuad(RenderInfo.Position, RenderInfo.Size, RenderInfo.Rotation, RenderInfo.Color);
 	}
@@ -814,7 +815,11 @@
 
 	void Renderer2D::DrawRotatedQuad(const CVec3& position, const CVec2& size, float rotation, const Ref<SubTexture2D>& texture, float tilingFactor /*= 1.0f*/, const CVec4& tintColor /*= CVec4(1.0f)*/)
 	{
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.f })
+			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
+			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
+		DrawQuad(transform, texture->GetTexture(), texture->GetTexCoords(), tilingFactor, tintColor);
 	}
 
 	void Renderer2D::ResetStats()

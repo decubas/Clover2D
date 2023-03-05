@@ -1,5 +1,6 @@
 
 #include "rectangle.h"
+#include "Graphics/renderer2D.h"
 
 
 	Box2D::Box2D(float x, float y, float Width, float Height)
@@ -12,6 +13,19 @@
 		: m_Position(Position), m_Bounds(Bounds)
 	{}
 
+	void Box2D::DrawDebug()
+	{
+		glm::vec4 BoxColor = { 0, 0, 1, 1 };
+		Renderer2D::DrawLine(TopLeft(), TopRight(), 2.f, BoxColor);
+		Renderer2D::DrawLine(TopRight(), BottomRight(), 2.f, BoxColor);
+		Renderer2D::DrawLine(BottomRight(), BottomLeft(), 2.f, BoxColor);
+		Renderer2D::DrawLine(BottomLeft(), TopLeft(), 2.f, BoxColor);
+		BoxColor = { 0, 1, 0, 1 };
+		Renderer2D::DrawQuad(m_Position, { 10, 10 }, BoxColor);
+		BoxColor = { 1, 0, 0, 1 };
+		Renderer2D::DrawQuad(Center(), { 10, 10 }, BoxColor);
+	}
+
 	bool Box2D::Contains(const glm::vec2& Point) const
 	{
 		return (Point.x >= m_Position.x &&
@@ -22,11 +36,15 @@
 
 	bool Box2D::Intersects(const Box2D& Other) const
 	{
-		return 
-			!(Other.m_Position.x - Other.m_Bounds.x >= m_Position.x + m_Bounds.x ||
-			Other.m_Position.x + Other.m_Bounds.x <= m_Position.x - m_Bounds.x ||
-			Other.m_Position.y - Other.m_Bounds.y >= m_Position.y + m_Bounds.y ||
-			Other.m_Position.y + Other.m_Bounds.y <= m_Position.y - m_Bounds.y);
+		return
+			(Contains(Other.BottomLeft()) ||
+				Contains(Other.BottomRight()) ||
+				Contains(Other.TopRight()) ||
+				Contains(Other.TopLeft()) ||
+				Other.Contains(TopLeft()) ||
+				Other.Contains(BottomLeft()) ||
+				Other.Contains(TopRight()) ||
+				Other.Contains(BottomRight()));
 	}
 
 	glm::vec2 Box2D::Center() const

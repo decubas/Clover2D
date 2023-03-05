@@ -13,7 +13,7 @@
 #include "renderer.h"
 #include "font.h"
 
-struct Renderable
+struct RenderableInfo
 {
 	CVec2 Position = {0.f, 0.f};
 	CVec2 Size = {1.f, 1.f};
@@ -21,13 +21,13 @@ struct Renderable
 	float Rotation = 0.f;
 };
 
-struct TexRenderable : public Renderable
+struct TexRenderable : public RenderableInfo
 {
 	Ref<Texture2D> Texture;
 	float TilingFactor = 1.0f;
 };
 
-struct SubTexRenderable : public Renderable
+struct SubTexRenderable : public RenderableInfo
 {
 	Ref<SubTexture2D> SubTexture;
 	float TilingFactor = 1.0f;
@@ -54,7 +54,7 @@ public:
 		static Ref<Texture2D> GetLastTexture();
 		static u32 CreateLayer();
 		static void UseLayer(u32 LayerToUse);
-		static void BeginScene(const SceneCamera& camera, const CMat4& transform);
+		static void BeginScene(const Camera& camera, const CMat4& transform);
 		static void BeginScene(EditorCamera& camera);
 		static void EndScene();
 		static void Flush();
@@ -74,7 +74,7 @@ public:
 		static void DrawQuad(const CVec3& position, const CVec2& size, const Ref<Texture2D>& texture, float tilingFactor = 1.0f, const CVec4& tintColor = CVec4(1.0f));
 		static void DrawQuad(const CVec2& position, const CVec2& size, const Ref<SubTexture2D>& texture, float tilingFactor = 1.0f, const CVec4& tintColor = CVec4(1.0f));
 
-		static void DrawQuad(const Renderable& RenderInfo);
+		static void DrawQuad(const RenderableInfo& RenderInfo);
 		static void DrawQuad(const TexRenderable& RenderInfo);
 		static void DrawQuad(const SubTexRenderable& RenderInfo);
 

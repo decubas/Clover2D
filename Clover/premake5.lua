@@ -15,6 +15,8 @@ project "Clover"
 		"Source/**.cc",
 		"Deps/stb_image/**.h",
 		"Deps/stb_image/**.cpp",
+		"Deps/ImGuizmo/**.h",
+		"Deps/ImGuizmo/**.cpp",
 
 		
 		"Deps/imgui/examples/imgui_impl_glfw.cpp",

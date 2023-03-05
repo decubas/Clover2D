@@ -9,41 +9,38 @@
 
 bool CloverEngine::Construct(const WindowProps& Properties, bool UseImGui)
 {
+	Random::Init();
+
 	m_ImGuiEnabled = UseImGui;
 	m_ImGuiConstructed = UseImGui;
 
 	m_Window.reset(GraphicContext::CreateCloverWindow(Properties));
 	m_Clock.reset();
 
-	m_UICamera.SetViewportSize(Properties.width_, Properties.height_);
-	m_UICamera.SetOrthographic(100, -1, 1);
-	
-	m_EditorCamera.SetViewportSize(Properties.width_, Properties.height_);
-	m_EditorCamera.SetOrthographic(100, -1, 1);
+// 	m_UICamera.SetViewportSize(Properties.width_, Properties.height_);
+// 	m_UICamera.SetOrthographic(100, -1, 1);
+// 	
+// 	m_EditorCamera.SetViewportSize(Properties.width_, Properties.height_);
+// 	m_EditorCamera.SetOrthographic(100, -1, 1);
 
-	m_ScreenBuffer = GraphicContext::CreateFrameBuffer(FramebufferSpecification(m_Window->width(), m_Window->height()));
-
+	m_MainRenderLayer = Renderer2D::CreateLayer();
 	Renderer::Init();
 #if USE_2D_RENDERER
 	Renderer2D::Init(m_Window->width(), m_Window->height());
 #endif
-	UI::Init(m_Window, &m_UICamera);
+	//UI::Init(m_Window, &m_UICamera);
 
-	OnUserConstruct();
+	//OnUserConstruct();
 
 	m_Window->OnWindowClose.AddFunction(this, &CloverEngine::Shutdown);
-	m_Window->OnWindowResize.AddFunction(this, &CloverEngine::OnWindowResize);
 
 	m_Running = true;
 
 	if (m_ImGuiConstructed)
 		ImGuiConstruct();
 
-#if USE_2D_RENDERER
-	m_MainRenderLayer = Renderer2D::CreateLayer();
-	m_UIRenderLayer = Renderer2D::CreateLayer();
 	Renderer2D::UseLayer(m_MainRenderLayer);
-#endif
+
 	return m_Window.get() != nullptr;
 }
 
@@ -51,19 +48,33 @@ void CloverEngine::Run()
 {
 	while (m_Running)
 	{
-		float fDelta = m_Clock.get();
+		m_DeltaTime = m_Clock.get();
+
+		m_Tick.Broadcast(m_DeltaTime);
+		m_TimerManager.UpdateTimers(m_DeltaTime);
+
+		for (Ref<Layer> layer : m_LayerStack)
+		{
+			layer->OnUpdate(m_DeltaTime);
+		}
+
+		
 #if USE_2D_RENDERER
 		Renderer2D::Clear();
 #endif
-		Renderer2D::UseLayer(m_MainRenderLayer);
-		OnUserUpdate(fDelta);		
-
- 		Renderer2D::UseLayer(m_UIRenderLayer);
- 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { 0.0f, 0.0f, 1.0f })
- 			* glm::scale(glm::mat4(1.0f), { 1.0f, 1.0f, 1.0f });
- 		Renderer2D::BeginScene(m_UICamera, transform);
-		OnUserUI(fDelta);
- 		Renderer2D::EndScene();
+		/*if (m_SceneViewport.GetViewportSize().x != m_MainScene->GetViewportWidth() && m_SceneViewport.GetViewportSize().y != m_MainScene->GetViewportHeight())
+		{
+			m_MainScene->OnViewportResize((u32)m_SceneViewport.GetViewportSize().x, (u32)m_SceneViewport.GetViewportSize().y);
+		}*/
+		/*
+ 		Renderer2D::UseLayer(m_MainScene->GetRenderLayer());
+ 		Renderer2D::BeginScene(m_MainScene->GetCurrentCamera(), glm::mat4(1.0f));*/
+		for (Ref<Layer> layer : m_LayerStack)
+		{
+			layer->OnRender();
+		}
+// 		Renderer2D::EndScene();
+		
 
 		Renderer::WaitAndRender();
 		Renderer::Swap();
@@ -73,9 +84,13 @@ void CloverEngine::Run()
 		if(m_ImGuiEnabled)
 		{
 			ImGuiNewFrame();
-			OnUserImGuiUpdate(fDelta);
+			for (Ref<Layer> layer : m_LayerStack)
+			{
+				layer->OnImGuiRender();
+			}
 			ImGuiEndFrame();
 		}
+
 
 #if USE_2D_RENDERER
 		Renderer2D::ResetStats();
@@ -99,12 +114,7 @@ void CloverEngine::Shutdown()
 
 glm::vec2 CloverEngine::GetMouseScreenPosition()
 {
-	return m_UICamera.ScreenToWorld(glm::vec2{ 1.f, -1.f } *m_Window->MapToViewport({ Input::mouseX(), Input::mouseY() }));
-}
-
-void CloverEngine::OnWindowResize(float Width, float Height)
-{
-	//m_ScreenBuffer->resize((u32)Width, (u32)Height);
+	return { 0, 0 };//m_UICamera.ScreenToWorld({ Input::mouseX(), Input::mouseY() });
 }
 
 void CloverEngine::ImGuiConstruct()

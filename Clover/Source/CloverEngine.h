@@ -14,14 +14,22 @@
 
 #include <Graphics/renderer.h>
 #include <Graphics/renderer2D.h>
+#include "Scene/scene.h"
+#include "Layers/layer_stack.h"
+#include "Scene/Panels/SceneViewportPanel.h"
 
+Delegate_OneParam(OnTickEvent, float, DeltaTime)
 
 class CloverEngine : public Cl_Object
 {
 public:
+	static CloverEngine* GetEngine();
 	bool Construct(const WindowProps& Properties, bool UseImGui = false);
 	void Run();
 	void Shutdown();
+
+	OnTickEvent m_Tick;
+	TimerManager m_TimerManager;
 
 protected: // Override by the User
 	virtual void OnUserConstruct() {};
@@ -34,7 +42,6 @@ protected:
 
 	glm::vec2 GetMouseScreenPosition();
 
-	void OnWindowResize(float Width, float Height);
 
 	// ImGui
 	void ImGuiConstruct();
@@ -49,18 +56,18 @@ private:
 	void OnShutdown();
 
 
-protected:
+public:
+	Ref<Scene> m_MainScene;
+	LayerStack m_LayerStack;
 	u32 m_MainRenderLayer;
-	u32 m_UIRenderLayer;
+
 	bool m_Running;
 	bool m_ImGuiEnabled;
-	Ref<FrameBuffer> m_ScreenBuffer;
-	EditorCamera m_EditorCamera;
-	SceneCamera m_UICamera;
 	Ref<Window> m_Window;
 	Clock m_Clock;
 
 private:
+	float m_DeltaTime = 0.f;
 	bool m_ImGuiConstructed;
 };
 

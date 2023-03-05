@@ -67,5 +67,4 @@
 		// (Name, Item)
 		CMap<CString, Ref<T>> items_;
 	};
-
 #endif

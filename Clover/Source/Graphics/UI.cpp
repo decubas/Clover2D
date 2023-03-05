@@ -26,7 +26,7 @@ void UI::RegisterUIObject(UIButton& button)
 
 void UI::Text(const std::string& text, const glm::vec2& position, const glm::vec2& spacing, const glm::vec2& scale /*= glm::vec2(1.0f)*/, const glm::vec4& color /*= glm::vec4(1.0f)*/)
 {
-	TextRenderer::RenderText(text, position - s_Camera->GetOrthographicSize(), spacing, scale, color);
+	TextRenderer::RenderText(text, position - s_Camera->GetOrthographicSizeWithAspectRatio(), spacing, scale, color);
 }
 
 void UI::Render(UIObject& object)
@@ -73,14 +73,14 @@ void UIButton::CheckMouse(float mouseX, float mouseY)
 	{
 		if (CurrentState == State::Default)
 		{
-			m_OnHover.Broadcast();
+			m_OnHover.Broadcast(this);
 			CurrentState = State::Hovered;
 		}
 	}
 	else if(CurrentState == State::Hovered)
 	{
 		CurrentState = State::Default;
-		m_OnHoverOut.Broadcast();
+		m_OnHoverOut.Broadcast(this);
 	}
 
 	LastMousePos = MousePos;
@@ -91,7 +91,7 @@ void UIButton::CheckMousePressed(int button)
 	if (Contains(LastMousePos))
 	{
 		CurrentState = State::Pressed;
-		m_OnPressed.Broadcast();
+		m_OnPressed.Broadcast(this);
 	}
 }
 
@@ -99,7 +99,7 @@ void UIButton::CheckMouseReleased(int button)
 {
 	if (CurrentState == State::Pressed)
 	{
-		m_OnReleased.Broadcast();
+		m_OnReleased.Broadcast(this);
 	}
 
 	if (Contains(LastMousePos))

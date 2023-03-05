@@ -72,7 +72,7 @@ protected:
 
 		void SetProjection(CMat4& projection) { m_Projection = projection; }
 		const CMat4& GetProjection() const { return m_Projection; }
-		virtual CVec4 ScreenToWorld(const CVec2& Position);
+		virtual CVec4 ScreenToWorld(const CVec2& Position, const CVec3& cameraPosition = { 0.f, 0.f, 0.f});
 
 	protected:
 		CMat4 m_Projection = CMat4(1.0f);
@@ -102,6 +102,9 @@ protected:
 		void SetOrthographicNear(float Near) { m_OrthoNear = Near; }
 		void SetOrthographicFar(float Far) { m_OrthoFar = Far; }
 
+		CVec2 GetOrthographicSizeWithAspectRatio() {
+			return 	{ 0.5f * m_AspecRatio * m_OrthoSize, 0.5f * m_OrthoSize };
+		}
 		float GetOrthographicSize() { return m_OrthoSize; }
 		float GetOrthographicFar() { return m_OrthoFar; }
 		float GetOrthographicNear() { return m_OrthoNear; }
@@ -133,7 +136,7 @@ protected:
 		void OnUpdate(float delta, float PanSpeed = 1.f, float ZoomSpeed = 1.f);
 
 		TransformComponent& GetTransform() { return m_Transform; }
-		virtual CVec4 ScreenToWorld(const CVec2& Position) override;
+		virtual CVec4 ScreenToWorld(const CVec2& Position, const CVec3& cameraPosition = {0, 0, 0}) override;
 
 	private:
 
