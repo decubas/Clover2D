@@ -5,7 +5,6 @@
 #include <chrono>
 
 
-	//Singleton
 	class Clock
 	{
 	public:

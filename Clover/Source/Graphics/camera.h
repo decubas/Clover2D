@@ -72,7 +72,9 @@ protected:
 
 		void SetProjection(CMat4& projection) { m_Projection = projection; }
 		const CMat4& GetProjection() const { return m_Projection; }
+		CMat4& GetProjection() { return m_Projection; }
 		virtual CVec4 ScreenToWorld(const CVec2& Position);
+		virtual CVec4 WorldToScreen(const CVec2& Position);
 
 	protected:
 		CMat4 m_Projection = CMat4(1.0f);

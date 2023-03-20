@@ -108,3 +108,8 @@ void TransformComponent::ResetTransform()
 	{
 		return CVec4{ Position.x, Position.y, 0.f, 1.f } * glm::inverse(m_Projection);
 	}
+
+	CVec4 Camera::WorldToScreen(const CVec2& Position)
+	{
+		return CVec4{ Position.x, Position.y, 0.f, 1.f } * (m_Projection);
+	}
