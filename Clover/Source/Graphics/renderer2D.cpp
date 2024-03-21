@@ -3,6 +3,7 @@
 #include <Graphics/renderer2D.h>
 #include <Graphics/render_command.h>
 #include <Graphics/graphiccontext.h>
+#include "Sandbox/rectangle.h"
 
 
 	struct ScreenVertex
@@ -51,6 +52,8 @@
 		QuadVertex* QuadVertexBufferPtr = nullptr;
 
 		glm::mat4 ViewProjection;
+
+		SceneCamera* CurrentCamera;
 
 		std::array<Ref<Texture2D>, 32> TextureSlots;
 		uint32_t TextureSlotIndex = 1; // 0 = white texture
@@ -388,6 +391,7 @@
 
 	void Renderer2D::BeginScene(EditorCamera& camera)
 	{
+		s_Layers[s_CurrentLayer].s_Data.CurrentCamera = (SceneCamera*) & camera;
 		s_Layers[s_CurrentLayer].s_Data.ViewProjection = camera.GetProjection() * camera.GetTransform().RecalculateModel();
 		s_DefaultData.ScreenFrameBuf->bind();
 
@@ -610,6 +614,16 @@
 		s_Stats.QuadCount++;
 	}
 
+	void Renderer2D::DrawRect(const CVec2& position, const CVec2& size, float thickness, const CVec4& color)
+	{
+		const CVec2 Pos = position - size * 0.5f;
+		DrawLine(Pos, {Pos.x + size.x, Pos.y}, thickness, color);
+		DrawLine({ Pos.x + size.x, Pos.y }, { Pos.x + size.x, Pos.y + size.y }, thickness, color);
+		DrawLine({ Pos.x + size.x, Pos.y + size.y }, { Pos.x, Pos.y + size.y }, thickness, color);
+		DrawLine(Pos, { Pos.x + size.x, Pos.y }, thickness, color);
+		DrawLine({ Pos.x, Pos.y + size.y }, Pos, thickness, color);
+	}
+
 	void Renderer2D::DrawQuad(const CVec2& position, const CVec2& size, const CVec4& color)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, size, color);
@@ -631,6 +645,12 @@
 
 	void Renderer2D::DrawQuad(const CVec3& position, const CVec2& size, const Ref<Texture2D>& texture, float tilingFactor, const CVec4& tintColor)
 	{
+		Box2D AABB = Box2D(position.x - size.x * 0.5f, position.y - size.y * 0.5f, size.x, size.y);
+		if (!s_Layers[s_CurrentLayer].s_Data.CurrentCamera->IsInFrustum(AABB))
+		{
+			//return;
+		}
+
 
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
@@ -715,6 +735,13 @@
 
 	void Renderer2D::DrawQuad(const CVec2& position, const CVec2& size, const Ref<SubTexture2D>& texture, float tilingFactor /*= 1.0f*/, const CVec4& tintColor /*= CVec4(1.0f)*/)
 	{
+		Box2D AABB = Box2D(position.x - size.x * 0.5f, position.y - size.y * 0.5f, size.x, size.y);
+		if (!s_Layers[s_CurrentLayer].s_Data.CurrentCamera->IsInFrustum(AABB))
+		{
+			return;
+		}
+
+
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.f })
 			* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
@@ -735,7 +762,7 @@
 			{
 				s_Layers[s_CurrentLayer].s_Data.TextureSlots[i] = s_DefaultData.WhiteTexture;
 			}
-		
+
 			if (*s_Layers[s_CurrentLayer].s_Data.TextureSlots[i] == *texture)
 			{
 				textureIndex = (int)i;

@@ -235,8 +235,6 @@
 				current->OnMouseScrolled.Broadcast(x, y);
 			});
 
-
-
 		//glViewport(0.0f, 0.0f, data_.width_, data_.height_);
 		//glMatrixMode(GL_PROJECTION);
 		//glLoadIdentity();

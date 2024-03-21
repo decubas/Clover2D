@@ -19,10 +19,10 @@ project "Clover"
 		"Deps/ImGuizmo/**.cpp",
 
 		
-		"Deps/imgui/examples/imgui_impl_glfw.cpp",
-		"Deps/imgui/examples/imgui_impl_glfw.h",
-		"Deps/imgui/examples/imgui_impl_opengl3.cpp",
-		"Deps/imgui/examples/imgui_impl_opengl3.h"
+		"Deps/imgui/backends/imgui_impl_glfw.cpp",
+		"Deps/imgui/backends/imgui_impl_glfw.h",
+		"Deps/imgui/backends/imgui_impl_opengl3.cpp",
+		"Deps/imgui/backends/imgui_impl_opengl3.h"
 	}
 
 	defines
@@ -42,6 +42,7 @@ project "Clover"
 		"%{wks.location}/Clover/Deps/box2d/include",
 		"%{wks.location}/Clover/Deps/yaml-cpp/include",
 		"%{wks.location}/Clover/Deps/ImGuizmo",
+		--"%{wks.location}/Clover/Deps/FreeType/include",
 	}
 
 	links
@@ -51,6 +52,7 @@ project "Clover"
 		"Glad",
 		"ImGui",
 		"yaml-cpp",
+		--"FreeType",
 		"opengl32.lib"
 	}
 

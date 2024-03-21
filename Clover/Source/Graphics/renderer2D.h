@@ -68,6 +68,7 @@ public:
 		static void DrawLine(const CVec2& p1, const CVec2& p2, float thickness, const CVec4& color);
 		static void DrawLine(const CVec2& p1, const CVec2& p2, float thickness, const Ref<Texture2D>& texture, const CVec4& tintColor = CVec4(1.f));
 
+		static void DrawRect(const CVec2& position, const CVec2& size, float thickness, const CVec4& color);
 		static void DrawQuad(const CVec2& position, const CVec2& size, const CVec4& color);
 		static void DrawQuad(const CVec3& position, const CVec2& size, const CVec4& color);
 		static void DrawQuad(const CVec2& position, const CVec2& size, const Ref<Texture2D>& texture, float tilingFactor = 1.0f, const CVec4& tintColor = CVec4(1.0f));

@@ -41,6 +41,7 @@ protected: // Override by the User
 protected:
 
 	glm::vec2 GetMouseScreenPosition();
+	glm::vec2 GetMouseWorldPosition();
 
 
 	// ImGui

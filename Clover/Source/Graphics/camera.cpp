@@ -3,6 +3,7 @@
 #include <Graphics/camera.h>
 #include <Graphics/window.h>
 #include <Delegate/delegate.h>
+#include "Sandbox/rectangle.h"
 
 TransformComponent::TransformComponent()
 {
@@ -93,6 +94,17 @@ void TransformComponent::ResetTransform()
 		RecalculateProjection();
 	}
 
+	bool SceneCamera::IsInFrustum(const Box2D& aabb)
+	{
+		CVec2 CenterScreen = (ScreenToWorld({ 0, 0 }));
+		Box2D Frustum = Box2D(
+			CenterScreen.x - m_OrthoSize, CenterScreen.y - m_OrthoSize,
+			m_OrthoSize * 2.f, m_OrthoSize * 2.f);
+
+
+		return Frustum.Intersects(aabb);
+	}
+
 	void SceneCamera::RecalculateProjection()
 	{
 		float right = 0.5f * m_AspecRatio * m_OrthoSize;
@@ -104,6 +116,8 @@ void TransformComponent::ResetTransform()
 			m_Projection = glm::ortho(-right, right, top, -top, m_OrthoNear, m_OrthoFar);
 		else
 			m_Projection = glm::perspective(m_PerspFOV, m_AspecRatio, m_PerspNear, m_PerspFar);
+
+
 	}
 
 

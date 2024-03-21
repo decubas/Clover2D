@@ -31,6 +31,7 @@ group "Dependencies"
 	include "Clover/Deps/Glad"
 	include "Clover/Deps/imgui"
 	include "Clover/Deps/yaml-cpp"
+	--include "Clover/Deps/freetype"
 group ""
 
 group "Engine"

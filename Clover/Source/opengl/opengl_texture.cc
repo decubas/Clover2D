@@ -87,6 +87,7 @@
 			break;
 		case 3:
 			internalFormat = GL_RGB8;
+			//internalFormat = GL_RGB8;
 			dataFormat = GL_RGB;
             //props_.format = Texture::Format::F_RGB;
 			break;

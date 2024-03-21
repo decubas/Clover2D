@@ -91,7 +91,7 @@ struct GLFWwindow;
 		CVec2 MapToViewport(const CVec2& Position)
 		{
 			return { 2.f * ((Position.x / data_.width_)) - 1.f,
-				(2.f * (Position.y / data_.height_)) - 1.f };
+				1.f - (2.f * (Position.y / data_.height_)) };
 		}
 
 		Window() {};

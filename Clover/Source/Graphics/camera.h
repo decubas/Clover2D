@@ -6,6 +6,7 @@
 #include "framebuffer.h"
 #include <Delegate/delegate.h>
 
+class Box2D;
 
 struct Transform
 {
@@ -87,7 +88,7 @@ protected:
 		virtual ~SceneCamera() = default;
 
 		void SetPerspective(float FOV, float farClip, float nearClip);
-		void SetOrthographic(float size, float farClip, float nearClip);
+		virtual void SetOrthographic(float size, float farClip, float nearClip);
 
 		void SetViewportSize(u32 width, u32 height);
 
@@ -112,14 +113,19 @@ protected:
 		float GetPerspectiveFOV() { return glm::degrees(m_PerspFOV); }
 		float GetPerspectiveFar() { return m_PerspFar; }
 		float GetPerspectiveNear() { return m_PerspNear; }
+		TransformComponent& GetTransform() { return m_Transform; }
+
+		bool IsInFrustum(const Box2D& aabb);
+		virtual CVec4 ScreenToWorld(const CVec2& Position) override;
 	protected:
-		void RecalculateProjection();
+		virtual void RecalculateProjection();
 	protected:
 		ProjectionType m_ProjectionType = ProjectionType::Orthographic;
 		float m_OrthoSize = 10.0f;
 		float m_OrthoNear = -1.0f, m_OrthoFar = 1.0f;
 
 		CVec2 m_Viewport;
+		TransformComponent m_Transform;
 
 		float m_PerspFOV = glm::radians(45.0f);
 		float m_PerspNear = 0.01f, m_PerspFar = 1000.0f;
@@ -145,7 +151,6 @@ protected:
 
 	private:
 
-		TransformComponent m_Transform;
 		CVec2 m_InitialMousePosition = { 0.0f, 0.0f };
 	};
 
